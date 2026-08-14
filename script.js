@@ -11,11 +11,15 @@ fetch('./data/experts.json')
         // 3. Initialise Fuse.js for full-text search
         const options = {
             keys: [
-                { name: 'Name', weight: 0.2 },
-                { name: 'HRC', weight: 0.2 },
+                { name: 'Name', weight: 0.1 },
+                { name: 'Email', weight: 0.1 },
+                { name: 'Role', weight: 0.3 },
+                { name: 'Organisation', weight: 0.3 },
+                { name: 'Location', weight: 0.3 },  
+                { name: 'HRC', weight: 0.4 },
                 { name: 'Clinical Expertise', weight: 0.5 },
                 { name: 'Methods Expertise', weight: 0.5 },
-                { name: 'Bio', weight: 0.8 }
+                { name: 'Bio', weight: 0.7 }
             ],
             threshold: 0.3,
             includeScore: true
@@ -65,11 +69,27 @@ function displayResults(data) {
         const card = document.createElement('div');
         card.className = 'expert-card';
         card.innerHTML = `
+        <div class="card-header">
             <h3>${expert.Name}</h3>
+            <p class="role-badge"><strong>${expert.Role || 'Expert'}</strong></p>
+        </div>
+        
+        <div class="meta-info">
             <p><strong>HRC:</strong> ${expert.HRC}</p>
-            <p><strong>Bio:</strong> ${expert.Bio || 'No biography available.'}</p>
+            <p><strong>Org:</strong> ${expert.Organisation} (${expert.Location})</p>
+        </div>
+
+        <p class="email-row">
+            <strong>Email:</strong> 
+            <a href="mailto:${expert.Email}" class="email-link">${expert.Email}</a>
+        </p>
+
+        <p><strong>Bio:</strong> ${expert.Bio || 'No biography available.'}</p>
+        
+        <div class="card-actions">
             <button class="email-btn" onclick="copyEmail('${expert.Email}')">Copy Email</button>
-        `;
+        </div>
+    `;
         container.appendChild(card);
     });
 }
